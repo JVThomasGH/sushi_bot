@@ -44,9 +44,9 @@ def main():
     # screenGrabGoal()
     # get_ocr_text()
 
-    # launch_page()
-    # startGame()
-    for i in range(5):
+    launch_page()
+    startGame()
+    for i in range(500):
         run_game()
         check_fail()
         fail_continue_watermark()

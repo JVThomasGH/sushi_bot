@@ -3,6 +3,7 @@ import random
 from time import sleep
 
 import cv2
+import pyautogui
 import pyautogui as pag
 from numpy import *
 from selenium import webdriver
@@ -10,6 +11,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
+from image_objects import ImagesObjects as iOB
 
 from bot_helper import bot
 
@@ -22,9 +25,10 @@ driver = webdriver.Firefox()
 
 
 def main():
-    # play_random_loop(3)
+    play_random_loop(3)
+    # click_play_button()
     # play_sequence_loop(1)
-    check_information_table()
+    # check_information_table()
 
 
 def play_random_loop(n):
@@ -33,7 +37,7 @@ def play_random_loop(n):
     nav_to_play_now_eaziwin()
     open_diski_action()
     bot.switch_to_window("ITHUBA National Lottery Play Eaziwin")
-    sleep(10)
+    sleep(5)
     bot.reset_screen("firefox")
     sound_pop_up_diski("off")
     click_play_button()
@@ -81,7 +85,6 @@ def check_information_table():
     click_info_back_to_game()
 
 
-
 def launch_page():
     driver.maximize_window()
     driver.implicitly_wait(10)
@@ -126,8 +129,7 @@ def sound_pop_up_diski(sound="off"):
     '''
     sleep(10)
     bot.reset_screen("firefox")
-    img_path = bot.image_path("Diski/sound_box")
-    img_box = bot.wait_for_image(img_path)
+    img_box = bot.wait_for_image(iOB.diski_sound_pop_up)
     if sound == "off":
         no_btn_diski_sound = (img_box[0] + 127, img_box[1] + 189)
         (x, y) = no_btn_diski_sound
@@ -140,14 +142,13 @@ def sound_pop_up_diski(sound="off"):
 
 def click_play_button():
     print("Clicking Play Button")
-    pag.click("C:\\Learning\\GameBot\\Needles\\Common\\play_button.png")
-    # pag.click("C:\\Learning\\GameBot\\Needles\\Common\\play_button.png")
+    pag.click(iOB.diski_play_now_button)
 
 
 def take_shots_random():
     sleep(4)
     # img = bot.grab_region("main_diski_play", 357, 109 ,1185, 898 )
-    kicks = pag.locateOnScreen("C:/Learning/GameBot/Needles/Diski/main_diski_play.png", confidence=0.8)
+    kicks = pag.locateOnScreen(iOB.diski_main_window_shoot, confidence=0.8)
     left_kick = kicks[0] + 423, kicks[1] + 579
     top_left_kick = kicks[0] + 449, kicks[1] + 443
     top_kick = kicks[0] + 596, kicks[1] + 406
@@ -165,7 +166,7 @@ def take_shots_random():
 def take_shots():
     sleep(4)
     # img = bot.grab_region("main_diski_play", 357, 109 ,1185, 898 )
-    kicks = pag.locateOnScreen("C:/Learning/GameBot/Needles/Diski/main_diski_play.png", confidence=0.8)
+    kicks = pag.locateOnScreen(iOB.diski_main_window_shoot, confidence=0.8)
     left_kick = kicks[0] + 423, kicks[1] + 579
     top_left_kick = kicks[0] + 449, kicks[1] + 443
     top_kick = kicks[0] + 596, kicks[1] + 406
@@ -190,30 +191,29 @@ def get_red_banner():
     bot.reset_screen("firefox")
     try:
         sleep(2)
-        # im = bot.grab_region("main_diski_play", 357, 142 ,1185, 898 )
-        points = pag.locateOnScreen("C:/Learning/GameBot/Needles/Diski/main_diski_play.png", confidence=0.8)
+        points = pag.locateOnScreen(iOB.diski_main_window_shoot, confidence=0.8)
         x, y = points[0] + 7, points[1]
         img = bot.grab_region("red_banner", x + 7, y + 689, 1179, 39)
         sleep(1)
         print(bot.get_ocr(img))
-    except:
+    except IOError:
         print("Unable to capture red banner image")
 
 
 def get_play_again_button():
-    pag.click("C:/Learning/GameBot/Needles/Common/play_again.png")
+    pag.click(iOB.diski_play_again)
 
 
 def click_info_icon():
-    img_path = bot.image_path("Common/info_icon")
+    img_path = bot.image_path(iOB.common_info_icon)
     pag.click(img_path)
     print(bot.get_ocr(img_path))
 
 
 def click_info_back_to_game():
     sleep(1)
-    print(pag.locateCenterOnScreen("C:/Learning/GameBot/Needles/Diski/info_table_text1.png"))
-    pag.moveTo("C:/Learning/GameBot/Needles/Diski/info_table_text1.png")
+    print(pag.locateCenterOnScreen(iOB.diski_info_table_1_text))
+    pag.moveTo(iOB.diski_info_table_1_text)
     # print(pag.locateOnScreen("C:/Learning/GameBot/Needles/Diski/main_diski_play.png"))
     # bot.grab_region("diski_info_1", 1, 2, 3, 4)
     # img = bot.image_path("Diski/back_to_game_diski")
@@ -223,14 +223,14 @@ def click_info_back_to_game():
 
 def click_info_right_arrow():
     sleep(1)
-    img = bot.image_path("Diski/back_to_game_diski_right_arrow")
+    img = bot.image_path(iOB.diski_back_to_game_right_arrow)
     bot.wait_for_image(img)
     pag.click(img)
 
 
 def click_info_left_arrow():
     sleep(1)
-    img = bot.image_path("Diski/back_to_game_diski_left_arrow")
+    img = bot.image_path(iOB.diski_back_to_game_left_arrow)
     bot.wait_for_image(img)
     pag.click(img)
 
