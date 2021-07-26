@@ -11,7 +11,7 @@ count = 0
 turns = 100
 
 while count < turns:
-    f = open("output.txt", "a")
+    f = open("../../../Bots/ecom/test_cases/output.txt", "a")
     if x > r and y < x and y != 0:
         f.write("+ " + str(x) + "  "+ str(y) +"\n")
         zplus += 1

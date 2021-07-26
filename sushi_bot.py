@@ -1,24 +1,29 @@
-import pyautogui
-import win32process
-from PIL import Image, ImageGrab, ImageOps
-import os
-import keyboard
-import time
-import win32api, win32con
-from selenium import webdriver
-import os
 import glob
-import PIL.ImageOps
-from numpy import *
-from Cord import Cord
-from blank import Blank
 import operator
+import os
+from os import path
+import time
+
+import keyboard
+import PIL.ImageOps
+import pyautogui
 import pytesseract
+import win32api
+import win32con
+import win32process
+from numpy import *
+from PIL import Image, ImageGrab, ImageOps
+from selenium import webdriver
+
+from blank import Blank
+from Cord import Cord
 
 # Globals
 # ------------------
 x_pad = 390
 y_pad = 197
+CUR_DIR = path.dirname(path.abspath(__file__))
+# C:\Bots\GameBot
 
 sushiTypes = {1910: 'onigiri',
               2555: 'caliroll',
@@ -87,7 +92,7 @@ def launch_page():
 def screenGrabHere():
     box = (x_pad + 1, y_pad + 1, x_pad + 640, y_pad + 480)
     im = ImageGrab.grab(box)
-    # im.save(os.getcwd() + "\\Images\\full_snap__" + str(int(time.time())) + ".png", "PNG")
+    # im.save(path.join(CUR_DIR, "\\Images\\full_snap__" + str(int(time.time())) + ".png", "PNG")
     return im
 
 
@@ -664,7 +669,7 @@ def get_seat_six():
 
 
 def clean_folder():
-    files = glob.glob('C:\\Learning\\GameBot\\Images\\*')
+    files = glob.glob(path.join(CUR_DIR, 'Images\\*'))
     for f in files:
         os.remove(f)
 
@@ -679,6 +684,7 @@ def run_game():
             print('sushi not found!\n sushiType = %i' % s1)
     else:
         print('Table 1 unoccupied')
+
 
     # checkFoodStock()
     s2 = get_seat_two()
@@ -745,7 +751,7 @@ def run_game():
 
 def check_you_win():
     t = (1, -240)
-    you_win = pyautogui.locateCenterOnScreen("C:\\Learning\\GameBot\\sushi_images\\you_win.png")
+    you_win = pyautogui.locateCenterOnScreen(path.join(CUR_DIR, "sushi_images\\you_win.png"))
     if you_win:
         print(you_win)
         continue_button_win = tuple(map(operator.sub, you_win, t))
@@ -753,8 +759,8 @@ def check_you_win():
 
 
 def check_fail():
-    fail = pyautogui.locateCenterOnScreen("C:\\Learning\\GameBot\\sushi_images\\fail.png")
-    fail_continue = pyautogui.locateCenterOnScreen("C:\\Learning\\GameBot\\sushi_images\\fail_continue.png")
+    fail = pyautogui.locateCenterOnScreen(path.join(CUR_DIR, "sushi_images\\fail.png"))
+    fail_continue = pyautogui.locateCenterOnScreen(path.join(CUR_DIR, "sushi_images\\fail_continue.png"))
 
     if fail:
         print("❌ YOU FAILED! ❌")
@@ -771,14 +777,14 @@ def check_fail():
 
 
 def fail_continue_watermark():
-    fail_next = pyautogui.locateCenterOnScreen("C:\\Learning\\GameBot\\sushi_images\\fail_continue_next.png")
+    fail_next = pyautogui.locateCenterOnScreen(path.join(CUR_DIR, "sushi_images\\fail_continue_next.png"))
     pyautogui.click(fail_next)
     print("Continue Watermark")
     # time.sleep(1.5)
 
 
 def fail_try_again():
-    try_again_yes = pyautogui.locateCenterOnScreen("C:\\Learning\\GameBot\\sushi_images\\try_again_yes.png")
+    try_again_yes = pyautogui.locateCenterOnScreen(path.join(CUR_DIR, "sushi_images\\try_again_yes.png"))
     pyautogui.click(try_again_yes)
     print("Try again...")
     # time.sleep(1.5)
@@ -787,7 +793,7 @@ def fail_try_again():
 
 def check_today_goal():
     t = (1, -240)
-    goal = pyautogui.locateCenterOnScreen("C:\\Learning\\GameBot\\sushi_images\\today_goal_header.png")
+    goal = pyautogui.locateCenterOnScreen(path.join(CUR_DIR, "sushi_images\\today_goal_header.png"))
     if goal:
         print(goal)
         continue_button_win = tuple(map(operator.sub, goal, t))
@@ -797,17 +803,18 @@ def check_today_goal():
 
 
 def check_shrimp_level():
-    food_item = pyautogui.locateCenterOnScreen("C:\\Learning\\GameBot\\sushi_images\\shrimp_text.png")
+    food_item = pyautogui.locateCenterOnScreen(path.join(CUR_DIR, "sushi_images\\shrimp_text.png"))
+    shrimp_level_path = path.join(CUR_DIR, 'sushi_images\\shrimp_text.png')
     if food_item:
         print(food_item)
         screenGrabGoal()
         get_ocr_text()
-        print(pytesseract.image_to_string(r'C:\\Learning\\GameBot\\sushi_images\\shrimp_text.png'))
+        print(pytesseract.image_to_string(shrimp_level_path))
 
 
 def get_ocr_text():
     pytesseract.pytesseract.tesseract_cmd = r'C:\\Users\\JodyT\\AppData\\Local\\Programs\\Tesseract-OCR\\tesseract'
-    # print(pytesseract.image_to_string(r'C:\\Learning\\GameBot\\Images\\today_goal.png'))
+    # print(pytesseract.image_to_string(r'C:\\Bots\\GameBot\\Images\\today_goal.png'))
 
 
 def grab():
@@ -815,7 +822,7 @@ def grab():
     im = ImageOps.grayscale(ImageGrab.grab(box))
     a = array(im.getcolors())
     a = a.sum()
-    im.save(os.getcwd() + "\\Images\\full_snap_gray__" + str(int(time.time())) + ".png", "PNG")
+    im.save(path.join(CUR_DIR, "Images\\full_snap_gray__" + str(int(time.time())) + ".png", "PNG"))
     print(a)
     return a
 
@@ -824,7 +831,7 @@ def screenGrabGoal():
     x, y = 530, 288
     box = (x, y, x + 360, y + 262)
     im = ImageGrab.grab(box)
-    im.save(os.getcwd() + "\\Images\\today_goal" + ".png", "PNG")
+    im.save(path.join(CUR_DIR, "Images\\today_goal.png"))
 
 
 check_you_win()
